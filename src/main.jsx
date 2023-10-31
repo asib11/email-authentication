@@ -8,9 +8,10 @@ import {
 } from "react-router-dom";
 import Main from './components/Layout/Main.jsx';
 import Home from './components/Home/Home.jsx';
-import Login from '../../first-firebase/src/components/Login/Login.jsx';
+import Login from './components/Login/Login';
 import Register from './components/Register/Register.jsx';
 import RegisterRBS from './components/RegisterRBS/RegisterRBS';
+
 
 const router = createBrowserRouter([
   {
