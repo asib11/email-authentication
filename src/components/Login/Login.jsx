@@ -1,9 +1,10 @@
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import app from '../../firebase/firebase.init';
 
+const auth = getAuth(app);
 const Login = () => {
     const [loginError, setLoginError] = useState('');
     const [success, SetSuccess] = useState('');
@@ -24,7 +25,7 @@ const Login = () => {
             return;
         }
         //firebase connect
-        const auth = getAuth(app);
+
         signInWithEmailAndPassword(auth, email, password)
             .then(result => {
                 const user = result.user;
@@ -38,10 +39,16 @@ const Login = () => {
             })
     }
 
+    const handleLogout = () => {
+        signOut(auth)
+            .then(setUser(null))
+            .catch(error => setLoginError(error.message))
+    }
+
     return (
         <div>
-            <h4>Please Login</h4>
-            <Form onSubmit={handleLogin}>
+
+            {/* <Form onSubmit={handleLogin}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" name='email' placeholder="Enter email" />
@@ -58,12 +65,37 @@ const Login = () => {
                 <Button variant="primary" type="submit">
                     Login
                 </Button>
-            </Form>
+            </Form> */}
             {
-                user && <div>
-                    <p className='text-danger'>{loginError}</p>
+                user ? <div>
                     <p className='text-success'>{success}</p>
+                    <h2>Welcome</h2>
+                    <Button onClick={handleLogout} variant="primary" type="submit">
+                        Log Out
+                    </Button>
+                </div> : <div>
+                    <h4>Please Login</h4>
+                    <Form onSubmit={handleLogin}>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control type="email" name='email' placeholder="Enter email" />
+
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control type="password" name='password' placeholder="Password" />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                            <Form.Check type="checkbox" label="Check me out" />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">
+                            Login
+                        </Button>
+                    </Form>
+                    <p className='text-danger'>{loginError}</p>
                 </div>
+
             }
         </div>
     );
