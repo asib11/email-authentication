@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import app from "../../firebase/firebase.init";
+import { Link } from "react-router-dom";
 
 
 const auth = getAuth(app);
@@ -26,12 +27,21 @@ const Register = () => {
                 const user = result.user;
                 console.log(user);
                 setSuccess('register successful');
+                userVerification(user)
                 event.target.reset();
             })
             .catch(error => {
                 setRegisterError(error.message);
             })
 
+    };
+
+    const userVerification = (user)=>{
+        sendEmailVerification(user)
+        .then(result =>{
+            console.log(result);
+            alert('please verify your account');
+        })
     }
 
     return (
@@ -44,6 +54,7 @@ const Register = () => {
                 <br />
                 <input type="submit" value="Register" />
             </form>
+            <p><small>Have you already account? please <Link to="/login">Login</Link> </small></p>
             <p style={{color: 'red'}}>{registerError}</p>
             <p style={{color: 'green'}}>{success}</p>
         </div>

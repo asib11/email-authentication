@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import app from '../../firebase/firebase.init';
+import { Link } from 'react-router-dom';
 
 const auth = getAuth(app);
 const Login = () => {
@@ -93,6 +94,7 @@ const Login = () => {
                             Login
                         </Button>
                     </Form>
+                    <p><small>Have not you already account? please <Link to="/register">Register</Link> </small></p>
                     <p className='text-danger'>{loginError}</p>
                 </div>
 
